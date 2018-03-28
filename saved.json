@@ -1,0 +1,39 @@
+{
+  "saved": [
+    {
+      "amount": 2.56,
+      "skipped_thing": "coffee",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 2.4,
+      "skipped_thing": "chips",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 2.56,
+      "skipped_thing": "coffee",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 2.56,
+      "skipped_thing": "coffee",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 0.96,
+      "skipped_thing": "sandwich",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 2.4,
+      "skipped_thing": "chips",
+      "for_thing": "magic"
+    },
+    {
+      "amount": 4.99,
+      "skipped_thing": "cheez-its",
+      "for_thing": "magic"
+    }
+  ]
+}
