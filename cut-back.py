@@ -1,17 +1,14 @@
 #! /usr/local/bin/python3
 import argparse
 
-from models.commands import SaveCommand, SpendCommand
+from models.commands import all_commands
 from models.errors import (
     CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
     InputError, TableItemLessThanZeroError
 )
 from models.table import Tables
 
-commands = [
-    SaveCommand(),
-    SpendCommand(),
-]
+commands = all_commands()
 
 
 def command_search(input):

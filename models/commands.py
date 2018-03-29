@@ -86,3 +86,10 @@ class SaveCommand(object):
             raise CommandSyntaxInvalidError(self.help)
 
         return SaveParseResult(matches.group(2), matches.group(3), matches.group(4))
+
+
+def all_commands():
+    return [
+        SaveCommand(),
+        SpendCommand(),
+    ]
