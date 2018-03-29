@@ -3,6 +3,15 @@ import json
 from utils import locale
 
 
+class TableAdjustment(object):
+    name = ''
+    amount = 0.0
+
+    def __init__(self, name, amount):
+        self.name = name
+        self.amount = amount
+
+
 class Tables(object):
     def __init__(self, path):
         self.path = path
@@ -26,12 +35,20 @@ class Tables(object):
         with open(self.path, 'w') as out:
             json.dump(self.table, out, indent=2)
 
-    def add_saved(self, saved):
+    def adjust_table(self, adjustment):
+        actually_saved_something = False
         for thing in self.table['saved']:
-            if saved.for_thing not in thing['name']:
+            if adjustment.name not in thing['name']:
                 continue
 
-            thing['amount'] += saved.amount
+            thing['amount'] += adjustment.amount
+            actually_saved_something = True
+
+        if not actually_saved_something:
+            self.table['saved'].append({
+                'name': adjustment.name,
+                'amount': adjustment.amount
+            })
 
     def summary(self):
         finalized_output = []

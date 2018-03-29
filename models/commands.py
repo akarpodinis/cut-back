@@ -2,6 +2,7 @@ import locale
 import re
 
 from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
+from .table import TableAdjustment
 
 
 class CommandParseResult(object):
@@ -17,7 +18,7 @@ class SaveParseResult(CommandParseResult):
         self.for_thing = for_thing.lower()
 
     def execute(self, table):
-        table.add_saved(self)
+        table.adjust_table(TableAdjustment(self.for_thing, self.amount))
         print(self)
 
     def __str__(self):
