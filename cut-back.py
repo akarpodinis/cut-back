@@ -45,7 +45,8 @@ def main(parsed_args):
 
     print(tables.summary())
     print('Ready to save!')
-    print('You can \'save\' right now.')
+    command_list_string = ', '.join(command.command_name for command in commands)
+    print(f'You can {command_list_string} right now.')
 
     if parsed_args.summary:
         return

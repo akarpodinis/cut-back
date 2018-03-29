@@ -13,12 +13,6 @@ class Saved(object):
         self.skipped_thing = skipped_thing.lower()
         self.for_thing = for_thing.lower()
 
-    def __enter__(self):
-        return self.prompt()
-
-    def __exit__(self, *args):
-        pass
-
     def summary(self):
         try:
             return 'Great!  You saved {} for {} when you skipped {}.'.format(
@@ -28,19 +22,6 @@ class Saved(object):
             )
         except Exception as e:
             raise InputError('A word, a number and a word, please.', __cause__=e)
-
-    @staticmethod
-    def prompt():
-        try:
-            raw_saved = input('Saved today? (skipped, amount, for): ')
-            saved = [word.strip() for word in raw_saved.split(',')]
-
-            if not saved:
-                return None
-
-            return Saved(saved.pop(), saved.pop(), saved.pop())
-        except Exception as e:
-            raise InputError('Three words, please, separated by commas') from e
 
 
 class Tables(object):
