@@ -83,6 +83,8 @@ class Tables(object):
             total = 0
             for saved in saved_alike[saved_for]:
                 total += round(float(saved['amount']), 2)
-            finalized_output.append(f" {saved['for_thing'].capitalize()} has {locale.currency(total)} saved.")
+            saved_caps = saved['for_thing'].capitalize()
+            formatted_amount = locale.currency(total)
+            finalized_output.append(f" {saved_caps} has {formatted_amount} saved.")
 
         return '\r\n'.join(finalized_output)
