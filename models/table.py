@@ -1,5 +1,6 @@
 import json
 
+from .errors import TableItemLessThanZeroError
 from utils import locale
 
 
@@ -40,6 +41,14 @@ class Tables(object):
         for thing in self.table['saved']:
             if adjustment.name not in thing['name']:
                 continue
+
+            if thing['amount'] + adjustment.amount < 0:
+                raise TableItemLessThanZeroError(
+                    'You can\'t spend more on {} than you have!\r\n You have saved {}.'.format(
+                        thing['name'],
+                        locale.currency(round(float(thing['amount']), 2))
+                    )
+                )
 
             thing['amount'] += adjustment.amount
             actually_saved_something = True

@@ -16,3 +16,7 @@ class CommandNotMatchedError(Exception):
 
 class CommandSyntaxInvalidError(Exception):
     pass
+
+
+class TableItemLessThanZeroError(Exception):
+    pass

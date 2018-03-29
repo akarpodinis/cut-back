@@ -1,15 +1,16 @@
 #! /usr/local/bin/python3
 import argparse
 
-from models.commands import SaveCommand
+from models.commands import SaveCommand, SpendCommand
 from models.errors import (
     CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
-    InputError
+    InputError, TableItemLessThanZeroError
 )
 from models.table import Tables
 
 commands = [
-    SaveCommand()
+    SaveCommand(),
+    SpendCommand(),
 ]
 
 
@@ -24,13 +25,16 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
-# TODO: Add verb support for 'spend' ($ spend 5.00 on magic)
+# TODO: Add a question to remove an item when the amount left is zero
+# TODO: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
+# TODO: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
 #       to reload the file from disk to load direct changes while running program
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
 # BUG: Currency ingenstion doesn't accept commas
+# √: Add verb support for 'spend' ($ spend 5.00 on magic)
 # √: Refactor to not save 'skipped_thing'
 # √: Add a summary of commands available at startup
 # √: Add verb support for 'save' ($ save 2.56 on coffee for magic)
@@ -65,6 +69,8 @@ def main(parsed_args):
                 except CommandSyntaxInvalidError as e:
                     print(e)
                 except CommandValidationError as e:
+                    print(e)
+                except TableItemLessThanZeroError as e:
                     print(e)
             except InputError as e:
                 if isinstance(e.__cause__, EOFError):
