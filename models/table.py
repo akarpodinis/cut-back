@@ -1,6 +1,6 @@
 import json
 
-from .errors import TableItemLessThanZeroError
+from .errors import TableItemLessThanZeroError, TableItemNotFoundError
 from utils import locale
 
 
@@ -35,6 +35,14 @@ class Tables(object):
     def save(self):
         with open(self.path, 'w') as out:
             json.dump(self.table, out, indent=2)
+
+    def remove(self, name):
+        for thing in self.table['saved']:
+            if thing['name'] == name:
+                self.table['saved'].remove(thing)
+                return thing
+
+        raise TableItemNotFoundError('You can\'t remove something that doesn\'t exist!')
 
     def adjust_table(self, adjustment):
         actually_saved_something = False

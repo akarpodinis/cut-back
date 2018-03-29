@@ -4,7 +4,7 @@ import argparse
 from models.commands import all_commands
 from models.errors import (
     CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
-    InputError, TableItemLessThanZeroError
+    InputError, TableItemLessThanZeroError, TableItemNotFoundError
 )
 from models.table import Tables
 
@@ -23,7 +23,6 @@ def command_search(input):
 
 
 # TODO: Add a question to remove an item when the amount left is zero
-# TODO: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
 #       to reload the file from disk to load direct changes while running program
@@ -31,6 +30,7 @@ def command_search(input):
 # TODO: Implement a scratchpad and ask to save?
 # TODO: Add an audit log saved to Path.home()
 # BUG: Currency ingenstion doesn't accept commas
+# √: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # √: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
 # √: Add verb support for `summary` ($ summary)
 # √: Generalize command class loading
@@ -72,6 +72,8 @@ def main(parsed_args):
                     print(e)
                 except TableItemLessThanZeroError as e:
                     print(e)
+                except TableItemNotFoundError as e:
+                        print(e)
             except InputError as e:
                 if isinstance(e.__cause__, EOFError):
                     raise e.__cause__

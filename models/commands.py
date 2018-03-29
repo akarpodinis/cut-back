@@ -7,6 +7,38 @@ from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
 from .table import TableAdjustment
 
 
+class RemoveParseResult(object):
+    def __init__(self, name):
+        self.name = name
+
+    def execute(self, table):
+        table.remove(self.name)
+        print(self)
+
+    def __str__(self):
+        return 'You removed {}.'.format(self.name)
+
+
+class RemoveCommand(object):
+    regex = r'(remove) ([\w ]*)'
+    command_name = 'remove'
+    help = 'To remove, use \'remove thing\'.'
+
+    def is_valid(self, input_string):
+        pattern = re.compile(self.regex)
+        matches = pattern.match(input_string)
+        if not matches:
+            if self.command_name in input_string:
+                raise CommandSyntaxInvalidError(self.help)
+            else:
+                raise CommandNotMatchedError()
+
+        if self.command_name not in matches.group(1) or pattern.groups != 2:
+            raise CommandSyntaxInvalidError(self.help)
+
+        return RemoveParseResult(matches.group(2))
+
+
 class TransferParseResult(object):
     def __init__(self, amount, from_thing, to_thing):
         self.amount = abs(round(float(amount), 2))
@@ -29,7 +61,7 @@ class TransferParseResult(object):
 class TransferCommand(object):
     regex = r'(transfer) \$?([\d,]*\.?\d*) from ([\w ]*) to ([\w ]*)'
     command_name = 'transfer'
-    help = 'To get transfer, use \'transfer\' $0.00 from thing to other_thing.'
+    help = 'To transfer, use \'transfer\' $0.00 from thing to other_thing.'
 
     def is_valid(self, input_string):
         pattern = re.compile(self.regex)

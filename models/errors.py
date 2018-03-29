@@ -20,3 +20,7 @@ class CommandSyntaxInvalidError(Exception):
 
 class TableItemLessThanZeroError(Exception):
     pass
+
+
+class TableItemNotFoundError(Exception):
+    pass
