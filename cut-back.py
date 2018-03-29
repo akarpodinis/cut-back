@@ -25,6 +25,7 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
+# TODO: Add verb support for `summary` ($ summary)
 # TODO: Add a question to remove an item when the amount left is zero
 # TODO: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
 # TODO: Add verb support to 'remove' tracking for an item outright ($ remove thing)
@@ -33,6 +34,7 @@ def command_search(input):
 #       to reload the file from disk to load direct changes while running program
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
+# TODO: Add an audit log saved to Path.home()
 # BUG: Currency ingenstion doesn't accept commas
 # √: Add verb support for 'spend' ($ spend 5.00 on magic)
 # √: Refactor to not save 'skipped_thing'
