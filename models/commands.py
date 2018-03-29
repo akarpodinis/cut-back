@@ -5,11 +5,7 @@ from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
 from .table import TableAdjustment
 
 
-class CommandParseResult(object):
-    name = ''
-
-
-class SpendParseResult(CommandParseResult):
+class SpendParseResult(object):
     name = 'spend'
 
     def __init__(self, amount, for_thing):
@@ -47,7 +43,7 @@ class SpendCommand(object):
         return SpendParseResult(matches.group(2), matches.group(3))
 
 
-class SaveParseResult(CommandParseResult):
+class SaveParseResult(object):
     name = 'save'
 
     def __init__(self, amount, on_thing, for_thing):
@@ -67,7 +63,6 @@ class SaveParseResult(CommandParseResult):
         )
 
 
-# TODO: Add verb support for 'save' ($ save 2.56 on coffee for magic)
 class SaveCommand(object):
     regex = r'(save) \$?([\d,]*\.?\d*) on ([\w ]*) for ([\w ]*)'
     command_name = 'save'
