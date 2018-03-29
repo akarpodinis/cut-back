@@ -1,27 +1,6 @@
 import json
-import locale
 
-from .errors import InputError
-
-
-locale.setlocale(locale.LC_ALL, 'en_US.UTF-8')
-
-
-class Saved(object):
-    def __init__(self, for_thing, amount, skipped_thing):
-        self.amount = round(float(amount), 2)
-        self.skipped_thing = skipped_thing.lower()
-        self.for_thing = for_thing.lower()
-
-    def summary(self):
-        try:
-            return 'Great!  You saved {} for {} when you skipped {}.'.format(
-                locale.currency(self.amount),
-                self.for_thing.capitalize(),
-                self.skipped_thing.capitalize(),
-            )
-        except Exception as e:
-            raise InputError('A word, a number and a word, please.', __cause__=e)
+from utils import locale
 
 
 class Tables(object):

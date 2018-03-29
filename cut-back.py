@@ -6,7 +6,7 @@ from models.errors import (
     CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
     InputError
 )
-from models.tables import Tables
+from models.table import Tables
 
 commands = [
     SaveCommand()

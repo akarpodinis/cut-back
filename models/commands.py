@@ -1,7 +1,7 @@
+import locale
 import re
 
 from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
-from .tables import Saved
 
 
 class CommandParseResult(object):
@@ -12,11 +12,20 @@ class SaveParseResult(CommandParseResult):
     name = 'save'
 
     def __init__(self, amount, on_thing, for_thing):
-        self.saved = Saved(for_thing, amount, on_thing)
+        self.amount = round(float(amount), 2)
+        self.on_thing = on_thing.lower()
+        self.for_thing = for_thing.lower()
 
     def execute(self, table):
-        table.add_saved(self.saved)
-        print(self.saved.summary())
+        # table.add_saved(self.saved)
+        print(self)
+
+    def __str__(self):
+        return 'Great!  You saved {} for {} when you skipped {}.'.format(
+            locale.currency(self.amount),
+            self.for_thing.capitalize(),
+            self.on_thing.capitalize(),
+        )
 
 
 # TODO: Add verb support for 'save' ($ save 2.56 on coffee for magic)
