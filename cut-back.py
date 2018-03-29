@@ -12,7 +12,7 @@ from models.errors import InputError
 #       to reload the file from disk to load direct changes while running program
 # TODO: Refactor to not save 'skipped_thing'
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
-# TODO: Implement a scratchpad and ask to save
+# TODO: Implement a scratchpad and ask to save?
 # √: Add a summary when starting up
 # √: Add CLI option to specify tables json location
 # √: Add a CLA for summary output only
@@ -37,8 +37,10 @@ def main(parsed_args):
                 else:
                     taking_input = False
             except InputError as e:
+                if isinstance(e.__cause__, EOFError):
+                    raise e.__cause__
+                print()
                 print(e)
-                print(e.args[0])
     except KeyboardInterrupt:
         print()
     except EOFError:

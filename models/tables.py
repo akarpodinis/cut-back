@@ -40,7 +40,7 @@ class Saved(object):
 
             return Saved(saved.pop(), saved.pop(), saved.pop())
         except Exception as e:
-            raise InputError('Three words, please, separated by commas', __cause__=e)
+            raise InputError('Three words, please, separated by commas') from e
 
 
 class Tables(object):
