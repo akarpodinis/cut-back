@@ -1,8 +1,44 @@
+import inspect
 import locale
 import re
+import sys
 
 from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
 from .table import TableAdjustment
+
+
+class SummaryParseResult(object):
+    name = 'summary'
+
+    def __init__(self):
+        pass
+
+    def execute(self, table):
+        print(table.summary())
+
+    def __str__(self):
+        return ''
+
+
+class SummaryCommand(object):
+    regex = r'(sum(?:mary)?)'
+    command_name = 'summary'
+    command_name_short = 'sum'
+    help = 'To get a summary, use \'sum\' or \'summary\'.'
+
+    def is_valid(self, input_string):
+        pattern = re.compile(self.regex)
+        matches = pattern.match(input_string)
+        if not matches:
+            if self.command_name in input_string:
+                raise CommandSyntaxInvalidError(self.help)
+            else:
+                raise CommandNotMatchedError()
+
+        if self.command_name_short not in matches.group(1) or pattern.groups != 1:
+            raise CommandSyntaxInvalidError(self.help)
+
+        return SummaryParseResult()
 
 
 class SpendParseResult(object):
@@ -84,7 +120,12 @@ class SaveCommand(object):
 
 
 def all_commands():
-    return [
-        SaveCommand(),
-        SpendCommand(),
-    ]
+    commands = list(map(
+        lambda cls: cls[1](),
+        filter(
+            lambda cls: cls[0].endswith('Command'),
+            inspect.getmembers(sys.modules[__name__], inspect.isclass)
+        )
+    ))
+
+    return commands
