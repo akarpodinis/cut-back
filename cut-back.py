@@ -5,7 +5,6 @@ from models.tables import Saved, Tables
 from models.errors import InputError
 
 
-# TODO: Change from split() to regex for command parsing
 # TODO: Add verb support for 'save' ($ save 2.56 on coffee for magic)
 # TODO: Add verb support for 'spend' ($ spend 5.00 on magic)
 # TODO: Add verb support for 'export' ($ export filename.csv)
@@ -16,6 +15,7 @@ from models.errors import InputError
 # TODO: Implement a scratchpad and ask to save
 # √: Add a summary when starting up
 # √: Add CLI option to specify tables json location
+# √: Add a CLA for summary output only
 def main(parsed_args):
     location = parsed_args.file
     tables = Tables(location)
@@ -23,6 +23,9 @@ def main(parsed_args):
     taking_input = True
 
     print(tables.summary())
+
+    if parsed_args.summary:
+        return
 
     try:
         while taking_input:
@@ -38,21 +41,32 @@ def main(parsed_args):
                 print(e.args[0])
     except KeyboardInterrupt:
         print()
-        pass
     except EOFError:
         print()
-        pass
 
     print(tables.summary())
     tables.save()
-    print('Done!')
 
 
 if __name__ == '__main__':
     parser = argparse.ArgumentParser(description='Track pocket change for budgeting!')
 
-    parser.add_argument('-f', '--file', type=str,
-                        default='saved.json', help='Database file location, in json format.')
+    parser.add_argument(
+        '-f',
+        '--file',
+        type=str,
+        default='saved.json',
+        help='Database file location, in json format.'
+    )
+
+    parser.add_argument(
+        '-s',
+        '--summary',
+        default=False,
+        action='store_true',
+        help='Print a summary and exit.'
+    )
 
     args = parser.parse_args()
     main(args)
+    print('Done!')
