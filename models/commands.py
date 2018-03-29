@@ -7,6 +7,45 @@ from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
 from .table import TableAdjustment
 
 
+class TransferParseResult(object):
+    def __init__(self, amount, from_thing, to_thing):
+        self.amount = abs(round(float(amount), 2))
+        self.from_thing = from_thing
+        self.to_thing = to_thing
+
+    def execute(self, table):
+        table.adjust_table(TableAdjustment(self.from_thing, self.amount * -1))
+        table.adjust_table(TableAdjustment(self.to_thing, self.amount))
+        print(self)
+
+    def __str__(self):
+        return 'You transferred {} from {} to {}.'.format(
+            locale.currency(self.amount),
+            self.from_thing.capitalize(),
+            self.to_thing.capitalize()
+        )
+
+
+class TransferCommand(object):
+    regex = r'(transfer) \$?([\d,]*\.?\d*) from ([\w ]*) to ([\w ]*)'
+    command_name = 'transfer'
+    help = 'To get transfer, use \'transfer\' $0.00 from thing to other_thing.'
+
+    def is_valid(self, input_string):
+        pattern = re.compile(self.regex)
+        matches = pattern.match(input_string)
+        if not matches:
+            if self.command_name in input_string:
+                raise CommandSyntaxInvalidError(self.help)
+            else:
+                raise CommandNotMatchedError()
+
+        if self.command_name not in matches.group(1) or pattern.groups != 4:
+            raise CommandSyntaxInvalidError(self.help)
+
+        return TransferParseResult(matches.group(2), matches.group(3), matches.group(4))
+
+
 class SummaryParseResult(object):
     name = 'summary'
 
