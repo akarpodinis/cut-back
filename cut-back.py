@@ -24,7 +24,6 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
-# TODO: Add a summary of commands available at startup
 # TODO: Refactor to not save 'skipped_thing'
 # TODO: Add verb support for 'spend' ($ spend 5.00 on magic)
 # TODO: Add verb support for 'export' ($ export filename.csv)
@@ -33,6 +32,7 @@ def command_search(input):
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
 # BUG: Currency ingenstion doesn't accept commas
+# √: Add a summary of commands available at startup
 # √: Add verb support for 'save' ($ save 2.56 on coffee for magic)
 # √: Add a summary when starting up
 # √: Add CLI option to specify tables json location
@@ -44,12 +44,13 @@ def main(parsed_args):
     taking_input = True
 
     print(tables.summary())
-    print('Ready to save!')
-    command_list_string = ', '.join(command.command_name for command in commands)
-    print(f'You can {command_list_string} right now.')
 
     if parsed_args.summary:
         return
+
+    print('Ready to save!')
+    command_list_string = ', '.join(command.command_name for command in commands)
+    print(f'You can {command_list_string} right now.')
 
     try:
         while taking_input:
