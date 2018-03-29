@@ -39,7 +39,7 @@ class Tables(object):
     def adjust_table(self, adjustment):
         actually_saved_something = False
         for thing in self.table['saved']:
-            if adjustment.name not in thing['name']:
+            if adjustment.name != thing['name']:
                 continue
 
             if thing['amount'] + adjustment.amount < 0:
