@@ -53,7 +53,7 @@ class Tables(object):
             with open(self.path, 'r') as file_json:
                 self.table = json.load(file_json)
         except Exception as e:
-            print('Making a new file at {}.'.format(self.path))
+            print(f'Making a new file at {self.path}.')
             self.table = {
                 'saved': []
             }

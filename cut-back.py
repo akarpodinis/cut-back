@@ -1,18 +1,39 @@
 #! /usr/local/bin/python3
 import argparse
 
-from models.tables import Saved, Tables
-from models.errors import InputError
+from models.commands import SaveCommand
+from models.errors import (
+    CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
+    InputError
+)
+from models.tables import Tables
+
+commands = [
+    SaveCommand()
+]
 
 
-# TODO: Add verb support for 'save' ($ save 2.56 on coffee for magic)
+def command_search(input):
+    for command in commands:
+        try:
+            return command.is_valid(input)
+        except CommandNotMatchedError:
+            continue
+
+    junk_name = input.split(' ')[0] or 'do what now'
+    raise CommandNotFoundError(f'You want me to {junk_name}?')
+
+
+# TODO: Add a summary of commands available at startup
+# TODO: Refactor to not save 'skipped_thing'
 # TODO: Add verb support for 'spend' ($ spend 5.00 on magic)
 # TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
 #       to reload the file from disk to load direct changes while running program
-# TODO: Refactor to not save 'skipped_thing'
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
+# BUG: Currency ingenstion doesn't accept commas
+# √: Add verb support for 'save' ($ save 2.56 on coffee for magic)
 # √: Add a summary when starting up
 # √: Add CLI option to specify tables json location
 # √: Add a CLA for summary output only
@@ -23,6 +44,8 @@ def main(parsed_args):
     taking_input = True
 
     print(tables.summary())
+    print('Ready to save!')
+    print('You can \'save\' right now.')
 
     if parsed_args.summary:
         return
@@ -30,17 +53,23 @@ def main(parsed_args):
     try:
         while taking_input:
             try:
-                saved = Saved.prompt()
-                if saved:
-                    tables.add_saved(saved)
-                    print(saved.summary())
-                else:
-                    taking_input = False
+                raw_input = input(':> ')
+
+                try:
+                    validation_result = command_search(raw_input)
+                    validation_result.execute(tables)
+                except CommandNotFoundError as e:
+                    print(e)
+                except CommandSyntaxInvalidError as e:
+                    print(e)
+                except CommandValidationError as e:
+                    print(e)
             except InputError as e:
                 if isinstance(e.__cause__, EOFError):
                     raise e.__cause__
                 print()
                 print(e)
+                taking_input = False
     except KeyboardInterrupt:
         print()
     except EOFError:
