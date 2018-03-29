@@ -8,15 +8,21 @@ from .table import TableAdjustment
 
 
 class RemoveParseResult(object):
+    amount = None
+
     def __init__(self, name):
         self.name = name
 
     def execute(self, table):
-        table.remove(self.name)
+        removed = table.remove(self.name)
+        self.amount = removed['amount']
         print(self)
 
     def __str__(self):
-        return 'You removed {}.'.format(self.name)
+        return 'You removed {} saved for {}.'.format(
+            locale.currency(self.amount),
+            self.name.capitalize()
+        )
 
 
 class RemoveCommand(object):
@@ -78,8 +84,8 @@ class TransferCommand(object):
         return TransferParseResult(matches.group(2), matches.group(3), matches.group(4))
 
 
-class SummaryParseResult(object):
-    name = 'summary'
+class SummarizeParseResult(object):
+    name = 'summarize'
 
     def __init__(self):
         pass
@@ -91,11 +97,11 @@ class SummaryParseResult(object):
         return ''
 
 
-class SummaryCommand(object):
-    regex = r'(sum(?:mary)?)'
-    command_name = 'summary'
+class SummarizeCommand(object):
+    regex = r'(sum(?:marize)?)'
+    command_name = 'summarize'
     command_name_short = 'sum'
-    help = 'To get a summary, use \'sum\' or \'summary\'.'
+    help = 'To summarize, use \'sum\' or \'summarize\'.'
 
     def is_valid(self, input_string):
         pattern = re.compile(self.regex)
@@ -109,7 +115,7 @@ class SummaryCommand(object):
         if self.command_name_short not in matches.group(1) or pattern.groups != 1:
             raise CommandSyntaxInvalidError(self.help)
 
-        return SummaryParseResult()
+        return SummarizeParseResult()
 
 
 class SpendParseResult(object):
