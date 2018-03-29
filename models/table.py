@@ -27,24 +27,18 @@ class Tables(object):
             json.dump(self.table, out, indent=2)
 
     def add_saved(self, saved):
-        self.table['saved'].append(vars(saved))
+        for thing in self.table['saved']:
+            if saved.for_thing not in thing['name']:
+                continue
+
+            thing['amount'] += saved.amount
 
     def summary(self):
-        saved_alike = {}
-        for saved in self.table['saved']:
-            saved_alike[saved['for_thing']] = []
-
-        for saved in self.table['saved']:
-            saved_alike[saved['for_thing']].append(saved)
-
         finalized_output = []
-
-        for saved_for in saved_alike:
-            total = 0
-            for saved in saved_alike[saved_for]:
-                total += round(float(saved['amount']), 2)
-            saved_caps = saved['for_thing'].capitalize()
-            formatted_amount = locale.currency(total)
+        for thing in self.table['saved']:
+            saved_caps = thing['name'].capitalize()
+            amount = round(float(thing['amount']), 2)
+            formatted_amount = locale.currency(amount)
             finalized_output.append(f" {saved_caps} has {formatted_amount} saved.")
 
         return '\r\n'.join(finalized_output)

@@ -24,7 +24,6 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
-# TODO: Refactor to not save 'skipped_thing'
 # TODO: Add verb support for 'spend' ($ spend 5.00 on magic)
 # TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
@@ -32,6 +31,7 @@ def command_search(input):
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
 # BUG: Currency ingenstion doesn't accept commas
+# √: Refactor to not save 'skipped_thing'
 # √: Add a summary of commands available at startup
 # √: Add verb support for 'save' ($ save 2.56 on coffee for magic)
 # √: Add a summary when starting up
