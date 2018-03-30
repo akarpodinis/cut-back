@@ -75,4 +75,7 @@ class Tables(object):
             formatted_amount = locale.currency(amount)
             finalized_output.append(f" {saved_caps} has {formatted_amount} saved.")
 
+        if not finalized_output:
+            finalized_output.append("You've saved nothing.  Get crackin'!")
+
         return '\r\n'.join(finalized_output)

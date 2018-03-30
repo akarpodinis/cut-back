@@ -11,7 +11,7 @@ Don't forget, you can add classes that end in `...Command` and have them automat
 detected and loaded by the command validator.
 
 `...ParseResult` should implement __init__(), execute() and __str__().
-`...Command` should implement in_valid() and have properties regex, command_name and help.
+`...Command` should implement is_valid() and have properties regex, command_name and help.
 """
 
 
