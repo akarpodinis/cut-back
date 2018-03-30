@@ -6,6 +6,14 @@ import sys
 from .errors import CommandNotMatchedError, CommandSyntaxInvalidError
 from .table import TableAdjustment
 
+"""
+Don't forget, you can add classes that end in `...Command` and have them automatically
+detected and loaded by the command validator.
+
+`...ParseResult` should implement __init__(), execute() and __str__().
+`...Command` should implement in_valid() and have properties regex, command_name and help.
+"""
+
 
 class RemoveParseResult(object):
     amount = None
