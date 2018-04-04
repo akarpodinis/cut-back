@@ -10,14 +10,12 @@ from .table import TableAdjustment
 Don't forget, you can add classes that end in `...Command` and have them automatically
 detected and loaded by the command validator.
 
-`...ParseResult` should implement __init__(), execute() and __str__().
+`...ParseResult` should implement __init__(), execute(), __str__() and audit().
 `...Command` should implement is_valid() and have properties regex, command_name and help.
 """
 
 
 class RemoveParseResult(object):
-    amount = None
-
     def __init__(self, name):
         self.name = name
 
@@ -31,6 +29,9 @@ class RemoveParseResult(object):
             locale.currency(self.amount),
             self.name.capitalize()
         )
+
+    def audit(self, separator='\t'):
+        return f'remove{separator}{self.amount}{separator}{self.name}'
 
 
 class RemoveCommand(object):
@@ -71,6 +72,9 @@ class TransferParseResult(object):
             self.to_thing.capitalize()
         )
 
+    def audit(self, sep='\t'):
+        return f'transfer{sep}{self.amount}{sep}{self.from_thing}{sep}{self.to_thing}'
+
 
 class TransferCommand(object):
     regex = r'(transfer) \$?([\d,]*\.?\d*) from ([\w ]*) to ([\w ]*)'
@@ -104,6 +108,9 @@ class SummarizeParseResult(object):
     def __str__(self):
         return ''
 
+    def audit(self, separator='\t'):
+        return 'summarize'
+
 
 class SummarizeCommand(object):
     regex = r'(sum(?:marize)?)'
@@ -127,8 +134,6 @@ class SummarizeCommand(object):
 
 
 class SpendParseResult(object):
-    name = 'spend'
-
     def __init__(self, amount, for_thing):
         self.for_thing = for_thing
         self.amount = abs(round(float(amount), 2))
@@ -142,6 +147,9 @@ class SpendParseResult(object):
             locale.currency(self.amount),
             self.for_thing.capitalize(),
         )
+
+    def audit(self, separator='\t'):
+        return f'spend{separator}{self.amount}{separator}{self.for_thing}'
 
 
 class SpendCommand(object):
@@ -165,8 +173,6 @@ class SpendCommand(object):
 
 
 class SaveParseResult(object):
-    name = 'save'
-
     def __init__(self, amount, on_thing, for_thing):
         self.amount = round(float(amount), 2)
         self.on_thing = on_thing.lower()
@@ -182,6 +188,10 @@ class SaveParseResult(object):
             self.for_thing.capitalize(),
             self.on_thing.capitalize(),
         )
+
+    # `sep` means `separator`.  I hate abbreviations but I hate over-run line lenghts more.
+    def audit(self, sep='\t'):
+        return f'save{sep}{self.amount}{sep}{self.on_thing}{sep}{self.for_thing}'
 
 
 class SaveCommand(object):

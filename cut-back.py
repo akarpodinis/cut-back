@@ -1,6 +1,7 @@
 #! /usr/local/bin/python3
 import argparse
 
+from models.audit_log import AuditLog
 from models.commands import all_commands
 from models.errors import (
     CommandNotFoundError, CommandNotMatchedError, CommandSyntaxInvalidError, CommandValidationError,
@@ -22,14 +23,13 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
-# TODO: Add an audit log saved to Path.home()
 # TODO: Add a question to remove an item when the amount left is zero
-# TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
 #       to reload the file from disk to load direct changes while running program
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
 # BUG: Currency ingenstion doesn't accept commas
+# √: Add an audit log saved to the local directory
 # √: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # √: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
 # √: Add verb support for `summary` ($ summary)
@@ -41,9 +41,14 @@ def command_search(input):
 # √: Add a summary when starting up
 # √: Add CLI option to specify tables json location
 # √: Add a CLA for summary output only
+# x: Add verb support for 'export' ($ export filename.csv)
+#    This has been supplanted by audit logging
 def main(parsed_args):
-    location = parsed_args.file
-    tables = Tables(location)
+    table_location = parsed_args.file
+    tables = Tables(table_location)
+
+    audit_location = parsed_args.audit_file
+    audit_log = AuditLog(audit_location)
 
     taking_input = True
 
@@ -64,6 +69,7 @@ def main(parsed_args):
                 try:
                     validation_result = command_search(raw_input)
                     validation_result.execute(tables)
+                    audit_log.log(validation_result)
                 except CommandNotFoundError as e:
                     print(e)
                 except CommandSyntaxInvalidError as e:
@@ -87,6 +93,7 @@ def main(parsed_args):
 
     print(tables.summary())
     tables.save()
+    audit_log.close()
 
 
 if __name__ == '__main__':
@@ -106,6 +113,20 @@ if __name__ == '__main__':
         default=False,
         action='store_true',
         help='Print a summary and exit.'
+    )
+
+    parser.add_argument(
+        '-a',
+        '--audit_file',
+        default='log.tsv',
+        help='Audit log output file location, tab-separated. A file will be created if none exists.'
+    )
+
+    parser.add_argument(
+        '--no_audit',
+        default=False,
+        action='store_true',
+        help='Turns off auditing.  Defaults to auditing on.'
     )
 
     args = parser.parse_args()
