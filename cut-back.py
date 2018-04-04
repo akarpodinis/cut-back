@@ -22,13 +22,13 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
+# TODO: Add an audit log saved to Path.home()
 # TODO: Add a question to remove an item when the amount left is zero
 # TODO: Add verb support for 'export' ($ export filename.csv)
 # TODO: Add verb support for 'reload' ($ reload)
 #       to reload the file from disk to load direct changes while running program
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
-# TODO: Add an audit log saved to Path.home()
 # BUG: Currency ingenstion doesn't accept commas
 # √: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # √: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
