@@ -79,7 +79,7 @@ class TransferParseResult(object):
 class TransferCommand(object):
     regex = r'(transfer) \$?([\d,]*\.?\d*) from ([\w ]*) to ([\w ]*)'
     command_name = 'transfer'
-    help = 'To transfer, use \'transfer\' $0.00 from thing to other_thing.'
+    help = 'To transfer, use \'transfer $0.00 from thing to other_thing\'.'
 
     def is_valid(self, input_string):
         pattern = re.compile(self.regex)
