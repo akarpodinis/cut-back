@@ -23,15 +23,8 @@ def command_search(input):
     raise CommandNotFoundError(f'You want me to {junk_name}?')
 
 
-# TODO: Add in-program help to re-print available commands
-# TODO: Add a question to remove an item when the amount left is zero
-# TODO: Add verb support for 'reload' ($ reload)
-#       to reload the file from disk to load direct changes while running program
 # TODO: Change underlying data structure to be objects in memory instead of a list of dictionaries.
 # TODO: Implement a scratchpad and ask to save?
-# BUG: Currency ingenstion doesn't accept commas
-# BUG: You can spend money that isn't saved
-#      :> spend 5 on potatoes for coffee
 # √: Add an audit log saved to the local directory
 # √: Add verb support to 'remove' tracking for an item outright ($ remove thing)
 # √: Add verb support to 'transfer' from one to another ($ transfer $0.00 from thing to thing)
